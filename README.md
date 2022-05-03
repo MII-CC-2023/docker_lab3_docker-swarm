@@ -1,4 +1,4 @@
-# Desplegar App Contenerizada en un Clúster Swarm
+# Lab 3. Desplegar App Contenerizada en un Clúster Swarm
 
 En esta guía vamos a desplegar una Aplicación desarrollada con Nodejs que utiliza una base de datos
 NoSQL MongoDB en un clúster Swarm. Para monitorizar los contenedores usaremos la aplicación visualizer.
