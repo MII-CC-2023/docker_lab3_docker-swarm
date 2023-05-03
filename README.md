@@ -244,7 +244,7 @@ EXPOSE 8080
 CMD ["node", "index.js"]
 ```
 
-Si lo deseas, aunque no es necesario, puedes crear la imagen con el comando: 
+Ahora puedes crear la imagen con el comando: 
 
 ```
 $ docker build -t <username>/<dockerimage> .
@@ -273,7 +273,7 @@ de MongoDB.
 version: "3.9"
 services:
   web:
-    build: .
+    image: <username>/<dockerimage>
     depends_on:
       - mongo
     deploy:
@@ -342,3 +342,7 @@ $ docker stack ps webapp
 ```shell
 $ docker stack rm webapp
 ```
+
+Puedes acceder al vizualizer con: http://<ip_master>:8080
+Puedes acceder a la aplicación con: http://<ip_master>
+
