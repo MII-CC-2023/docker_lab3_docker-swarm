@@ -1,7 +1,7 @@
 # Lab 3. Desplegar App Contenerizada en un Clúster Swarm
 
 En esta guía vamos a desplegar una Aplicación desarrollada con Nodejs que utiliza una base de datos
-NoSQL MongoDB en un clúster Swarm. Para monitorizar los contenedores usaremos la aplicación visualizer.
+NoSQL MongoDB en un clúster Swarm. Para monitorizar los contenedores usaremos la aplicación contenerizada visualizer.
 
 
 ## Crear el clúster
@@ -9,7 +9,6 @@ NoSQL MongoDB en un clúster Swarm. Para monitorizar los contenedores usaremos l
 Crear 3 máquinas virtuales, una de ellas la denominaremos: master y las otras dos: nodo1 y nodo2.
 
 Instalamos docker en cada una de ellas.
-Instalamos docker-compose en el máster
 
 Iniciamos el Swarm en la máquina máster
 ```
@@ -25,7 +24,7 @@ To add a manager to this swarm, run 'docker swarm join-token manager' and follow
 
 ```
 
-Unimos al Swarm los otros dos nodos
+Unimos al Swarm los otros dos nodos com o workers
 
 ```
 $ docker swarm join --token SWMTKN-2-2755s1w5d5ssynkmlz1qvrorw6lox4p5f0ibjgp4mh1p038t6d-ax1xe0bdhal9pg8a8zbkvf736 10.132.0.10:2377
@@ -48,7 +47,7 @@ Para clonarlo ejecuta el siguiente comando en la máquina master:
 
 
 ```
-$ git clone https://github.com/jlalvarez/webapp.git
+$ git clone https://github.com/MII-CC-2023/docker_lab3_docker-swarm.git
 ```
 
 ### Aplicación Nodejs
@@ -159,7 +158,7 @@ var server = app.listen(8080, function () {
 
 Los requisitos están indicados en el fichero package.json:
 
-```
+```json
 {
   "name": "node-webapp",
   "version": "1.0.0",
@@ -245,8 +244,7 @@ EXPOSE 8080
 CMD ["node", "index.js"]
 ```
 
-Para ello, utiliza el comando: 
-
+Si lo deseas, aunque no es necesario, puedes crear la imagen con el comando: 
 
 ```
 $ docker build -t <username>/<dockerimage> .
@@ -255,7 +253,7 @@ $ docker build -t <username>/<dockerimage> .
 Donde <username> debe ser sustituido por tu usuario en Docker Hub y <dockerimage> por el nombre
 que se dará a la imagen. Por ejemplo, jluisalvarez/node-webapp
 
-Sube la imagen al Docker Hub. Para ello, identificate y luego sube la imagen.
+y subir la imagen al Docker Hub. Para ello, identificate y luego sube la imagen.
 
 ```js
 $ docker login
@@ -266,18 +264,16 @@ $ docker push <username>/<dockerimage>
 ```
 
 
-
 ## Docker Compose
 
 El fichero doker-compose.yml tiene definidos 3 servicios, una red para conectarlos y un volumen para persistir los datos
 de MongoDB.
-Cambia la imagen del servicio web (jluisalvarez/node-webapp) por la creada en el paso anterior.
 
 ```js
-version: "3.7"
+version: "3.9"
 services:
   web:
-    imagen: jluisalvarez/node-webapp
+    build: .
     depends_on:
       - mongo
     deploy:
@@ -327,22 +323,22 @@ networks:
 
 Podrás desplegar los servicios ejecutando el siguiente comando:
 
-```js
+```shell
 $ docker stack deploy -c docker-compose.yml webapp
 ```
 
 ## Mostrar listado de servicios y contenedores
 
-```js
+```shell
 $ docker service ls
 ```
 
-```js
+```shell
 $ docker stack ps webapp
 ```
 
 ## Eliminar servicios
 
-```js
+```shell
 $ docker stack rm webapp
 ```
