@@ -17,8 +17,10 @@ mongoose.connect(urlmongo, { useNewUrlParser: true }, function(err, dbmongo) {
 
 var linkSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
+    author: String,
     url: String,
-    description: String
+    description: String,
+    date: String
 });
 var Link = mongoose.model('Link', linkSchema);
 
@@ -58,11 +60,16 @@ var link_list = function (req, res) {
 router.get('/list',link_list);
 
 var link_create = function (req, res) {
+    d = new Date();
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+
     var l = new Link(
         {
-           _id: new mongoose.Types.ObjectId(),
+            _id: new mongoose.Types.ObjectId(),
+            author: req.body.author,
             url: req.body.url,
-            description: req.body.description
+            description: req.body.description,
+            date: d.toLocaleDateString('es-ES', options)
         }
     );
 
